@@ -15,9 +15,8 @@ export function validateEnvironmentVariables() {
     Boolean,
   ).length;
   if (authMethodsCount > 1) {
-  // if (useBedrock && useVertex) {
     errors.push(
-      "Cannot use both Bedrock and Vertex AI simultaneously. Please set only one provider.",
+      "Cannot use multiple authentication methods simultaneously. Please set only one of: use_bedrock, use_vertex, or use_oauth.",
     );
   }
 
@@ -26,18 +25,19 @@ export function validateEnvironmentVariables() {
       errors.push(
         "ANTHROPIC_API_KEY is required when using direct Anthropic API.",
       );
-    } else if (useOAuth) {
-      const requiredOAuthVars = {
-        CLAUDE_ACCESS_TOKEN: process.env.CLAUDE_ACCESS_TOKEN,
-        CLAUDE_REFRESH_TOKEN: process.env.CLAUDE_REFRESH_TOKEN,
-        CLAUDE_EXPIRES_AT: process.env.CLAUDE_EXPIRES_AT,
-      };
+    }
+  } else if (useOAuth) {
+    const requiredOAuthVars = {
+      CLAUDE_ACCESS_TOKEN: process.env.CLAUDE_ACCESS_TOKEN,
+      CLAUDE_REFRESH_TOKEN: process.env.CLAUDE_REFRESH_TOKEN,
+      CLAUDE_EXPIRES_AT: process.env.CLAUDE_EXPIRES_AT,
+    };
 
-      Object.entries(requiredOAuthVars).forEach(([key, value]) => {
-        if (!value) {
-          errors.push(`${key} is required when using OAuth authentication.`);
-        }
-      });
+    Object.entries(requiredOAuthVars).forEach(([key, value]) => {
+      if (!value) {
+        errors.push(`${key} is required when using OAuth authentication.`);
+      }
+    });
   } else if (useBedrock) {
     const requiredBedrockVars = {
       AWS_REGION: process.env.AWS_REGION,
