@@ -81,7 +81,7 @@ inputs:
     required: false
     default: ""
   claude_expires_at:
-    description: "Claude AI OAuth token expiration timestamp (required when use_oauth is true)"Add commentMore actions
+    description: "Claude AI OAuth token expiration timestamp (required when use_oauth is true)"
     required: false
     default: ""
 
